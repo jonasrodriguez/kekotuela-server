@@ -1,9 +1,20 @@
 const Order = require('./order.model.js');
+const ObjectID = require('mongodb').ObjectID;
 
-exports.insert = (body) => {
-    const order = new Order(body);
+function FillOrderData(data) {
+    return new Order({        
+        client: ObjectID(data.clientId),
+        user: (data.userId) ? ObjectID(data.userId) : null,        
+        readableId: data.readableId,
+        priority: data.priority,
+        description: data.description,
+        orderDate: data.orderDate
+    });
+};
 
-    try {
+exports.insert = (body) => {    
+    try {                     
+        const order = FillOrderData(body);
         order.save();
     } catch (error) {
         throw Error('Error while inserting new order');
@@ -11,12 +22,10 @@ exports.insert = (body) => {
 }
 
 exports.get = async function (query) {
-
     try {
         var orders = await Order.find(query)
         return orders;
     } catch (e) {
-        // Log Errors
         throw Error('Error while getting Orders')
     }
 }

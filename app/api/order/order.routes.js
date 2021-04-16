@@ -1,9 +1,11 @@
 module.exports = (app) => {
-    const orders = require('./order.controller.js');
+    const controller = require('./order.controller.js');
 
     // Insert orders
-    app.post('/orders', orders.addOrder);
+    app.post('/orders', controller.addOrder);
 
-    // Retrieve all orders
-    app.get('/orders', orders.getOrders);
+    // Retrieve all orders    
+    app.get('/orders', controller.findAll);
+
+    //app.get('/orders', orders.getOrders);
 }

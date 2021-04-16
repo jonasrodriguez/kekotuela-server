@@ -1,11 +1,11 @@
 module.exports = (app) => {
     const users = require('./user.controller.js');
 
+    // Retrieve all users
+    app.get('/users', users.findAll);
+
     // Insert user
     app.post('/users', users.insert);
-
-    // Retrieve all Notes
-    app.get('/users', users.getUsers);
 
     // Retrieve a single Client with noteId
     //app.get('/clients/:clientId', clients.findOne);

@@ -6,7 +6,9 @@ const ClientSchema = mongoose.Schema({
     second_surname: String,
     dni: String,
     phone: String,
-    address: String,
+    address: String,    
+    city: String,
+    cp: String,
     email: String,
     comment: String
     }, {timestamps: true}

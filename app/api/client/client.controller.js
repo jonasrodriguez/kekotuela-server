@@ -12,7 +12,16 @@ exports.create = async (req, res) => {
 };
 
 // Retrieve and return all Clients from the database.
-exports.findAll = (req, res) => {
+exports.getClients = (req, res) => {
+    if(Object.keys(req.query).length === 0) {
+        findAll(res);
+    }
+    else {
+        findClients(req, res);
+    }    
+};
+
+const findAll = (res) => {
     Client.find().then(clients => {
         res.send(clients);
     }).catch(err => {
@@ -20,6 +29,14 @@ exports.findAll = (req, res) => {
             message: err.message || "Some error occurred while retrieving clients."
         });
     });
+};
+
+const findClients = (req, res) => {
+    const reg = new RegExp(req.query.filter, 'i');
+    Client.find({$or: [
+            {'name': reg},
+            {'surname': reg}]})
+            .then(clients => { res.send(clients); });
 };
 
 // Find a client with a clientId

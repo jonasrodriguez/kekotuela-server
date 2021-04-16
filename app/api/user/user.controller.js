@@ -1,3 +1,4 @@
+const User = require('./user.model');
 const Service = require('./user.service');
 
 exports.insert = async function (req, res) {
@@ -7,6 +8,17 @@ exports.insert = async function (req, res) {
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
+};
+
+// Retrieve and return all Users from the database.
+exports.findAll = (req, res) => {
+    User.find().then(users => {
+        res.send(users);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving users."
+        });
+    });
 };
 
 exports.getUsers = async function (req, res) {

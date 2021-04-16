@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const MaterialSchema = mongoose.Schema({    
-    materialId: String,
-    priceUnit: Number,
-    quantity: Number
-});
-
-const OrderSchema = mongoose.Schema({    
-    userId: String,
-    clientId: String,
-    comments: String,
-    descripcion: String,
-    materials: MaterialSchema,
+const OrderSchema = Schema({   
+    readableId: String,     
+    client: { type: Schema.Types.ObjectId, ref: 'Client' },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    priority: Number,
+    description: String,    
+    orderDate: Date,
     }, {timestamps: true}
 );
 

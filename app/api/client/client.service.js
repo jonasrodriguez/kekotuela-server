@@ -12,6 +12,8 @@ exports.create = async function (body) {
         dni: body.dni,
         phone: body.phone,
         address: body.address,
+        cp: body.cp,
+        city: body.city,
         email: body.email,
         comment: body.comment
     });
