@@ -1,15 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 
 // create express app
 const app = express();
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }))
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json())
+app.use(express.json())
 
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
@@ -28,24 +27,11 @@ mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true
 // enable cors
 app.use(cors());
 
-// define a simple route
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to Koketuela!!"});
-});
-
-// Require Clients routes
-require('./app/api/client/client.routes.js')(app);
-
-// Require Users routes
-require('./app/api/user/user.routes.js')(app);
-
-// Require Orders routes
-require('./app/api/order/order.routes.js')(app);
-
-// Require Materials routes
-require('./app/api/material/material.routes.js')(app);
+// Require routes
+const routes = require('./app/routes');
+app.use('/api', routes);
 
 // listen for requests
-app.listen(3001, () => {
-    console.log("Server is listening on port 3001");
+app.listen(4000, () => {
+    console.log("Server is listening on port 4000");
 });

@@ -1,12 +1,13 @@
-const Order = require('./order.model.js');
+const Note = require('./order.model.js');
 const ObjectID = require('mongodb').ObjectID;
 
 function FillOrderData(data) {
     return new Order({        
         client: ObjectID(data.clientId),
         user: (data.userId) ? ObjectID(data.userId) : null,        
-        readableId: data.readableId,
+        reference: data.reference,
         priority: data.priority,
+        summary: data.summary,
         description: data.description,
         orderDate: data.orderDate
     });
@@ -17,15 +18,16 @@ exports.insert = (body) => {
         const order = FillOrderData(body);
         order.save();
     } catch (error) {
-        throw Error('Error while inserting new order');
+        throw Error('Error while inserting new note.');
     }
 }
 
 exports.get = async function (query) {
     try {
-        var orders = await Order.find(query)
-        return orders;
+        var notes = await Note.find(query)
+        return notes;
     } catch (e) {
-        throw Error('Error while getting Orders')
+        throw Error('Error while getting Notes.')
     }
 }
+

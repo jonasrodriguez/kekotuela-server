@@ -1,18 +1,19 @@
-module.exports = (app) => {
-    const clients = require('./client.controller.js');
+const router = require('express').Router();
+const controller = require('./client.controller.js');
 
-    // Retrieve all Clients
-    app.get('/clients', clients.getClients);
+// Retrieve all Clients
+router.get('/', controller.getClients);
 
-    // Create a new Client
-    app.post('/clients', clients.create);
+// Create a new Client
+router.post('/', controller.create);
 
-    // Retrieve a single Client with noteId
-    app.get('/clients/:clientId', clients.findOne);
+// Retrieve a single Client with noteId
+router.get('/:clientId', controller.findOne);
 
-    // Update a Note with noteId
-    app.put('/clients/:clientId', clients.update);
+// Update a Note with noteId
+router.put('/:clientId', controller.update);
 
-    // Delete a Note with noteId
-    app.delete('/clients/:clientId', clients.delete);
-}
+// Delete a Note with noteId
+router.delete('/:clientId', controller.delete);
+
+module.exports = router;

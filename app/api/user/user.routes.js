@@ -1,18 +1,10 @@
-module.exports = (app) => {
-    const users = require('./user.controller.js');
+const router = require('express').Router();
+const controller = require('./user.controller.js');
 
-    // Retrieve all users
-    app.get('/users', users.findAll);
+// Retrieve all users
+router.get('/', controller.findAll);
 
-    // Insert user
-    app.post('/users', users.insert);
+// Insert user
+router.post('/', controller.insert);
 
-    // Retrieve a single Client with noteId
-    //app.get('/clients/:clientId', clients.findOne);
-
-    // Update a Note with noteId
-    //app.put('/clients/:clientId', clients.update);
-
-    // Delete a Note with noteId
-    //app.delete('/clients/:clientId', clients.delete);
-}
+module.exports = router;

@@ -1,9 +1,11 @@
-module.exports = (app) => {
-    const materials = require('./material.controller.js');
+const router = require('express').Router();
+const controller = require('./material.controller.js');
+const validator = require('../../middleware/validators/material');
 
-    // Insert material
-    app.post('/materials', materials.addMaterials);
+// Insert material
+router.post('/', validator.materialValidator, controller.addMaterials);
 
-    // Retrieve all materials
-    app.get('/materials', materials.getMaterials);
-}
+// Retrieve all materials
+router.get('/', controller.findAll);
+
+module.exports = router;
