@@ -1,4 +1,4 @@
-const Note = require('./order.model.js');
+const Note = require('./note.model.js');
 const ObjectID = require('mongodb').ObjectID;
 
 function FillOrderData(data) {

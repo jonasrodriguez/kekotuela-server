@@ -5,6 +5,6 @@ const controller = require('./note.controller.js');
 router.get('/', controller.findAll);
 
 // Create a new note
-router.post('/', controller.addOrder);
+router.post('/', controller.add);
 
 module.exports = router;
