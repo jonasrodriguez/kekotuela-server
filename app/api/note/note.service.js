@@ -4,12 +4,12 @@ const ObjectID = require('mongodb').ObjectID;
 function FillOrderData(data) {
     return new Order({        
         client: ObjectID(data.clientId),
-        user: (data.userId) ? ObjectID(data.userId) : null,        
         reference: data.reference,
         priority: data.priority,
         summary: data.summary,
         description: data.description,
-        orderDate: data.orderDate
+        scheduledUser: (data.userId) ? ObjectID(data.userId) : null,
+        scheduledDate: data.orderDate
     });
 };
 

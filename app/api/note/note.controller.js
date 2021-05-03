@@ -33,3 +33,49 @@ exports.getNotes = async function (req, res) {
     }
 }
 
+exports.update = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "User data to update can not be empty!"
+        });
+    }
+
+    const id = req.params.noteId;
+
+    Note.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+        if (!data) {
+            res.status(404).send({
+            message: `Cannot update Note with id=${id}. Maybe Note was not found!`
+            });
+        } else res.send({ message: "Note was updated successfully." });
+        })
+        .catch(err => {
+        res.status(500).send({
+            message: "Error updating Note with id=" + id
+        });
+    });
+};
+
+  
+exports.delete = (req, res) => {
+    const id = req.params.noteId;
+  
+    User.findByIdAndRemove(id, { useFindAndModify: false })
+      .then(data => {
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot delete Note with id=${id}. Maybe Note was not found!`
+          });
+        } else {
+          res.send({
+            message: "Note was deleted successfully!"
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Could not delete Note with id=" + id
+        });
+    });
+};

@@ -1,19 +1,21 @@
 const router = require('express').Router();
 const controller = require('./client.controller.js');
+const validator = require('../../middleware/validators/client.validator');
+const auth = require('../../middleware/auth/authenticateJWT');
 
 // Retrieve all Clients
-router.get('/', controller.getClients);
+router.get('/', auth.authenticateJWT, controller.getClients);
 
 // Create a new Client
-router.post('/', controller.create);
+router.post('/', auth.authenticateJWT, validator.clientValidator, controller.create);
 
 // Retrieve a single Client with noteId
-router.get('/:clientId', controller.findOne);
+router.get('/:clientId', auth.authenticateJWT, controller.findOne);
 
-// Update a Note with noteId
-router.put('/:clientId', controller.update);
+// Update a Client with clientId
+router.put('/:clientId', auth.authenticateJWT, validator.clientValidator, controller.update);
 
-// Delete a Note with noteId
-router.delete('/:clientId', controller.delete);
+// Delete a Client with clientId
+router.delete('/:clientId', auth.authenticateJWT, controller.delete);
 
 module.exports = router;

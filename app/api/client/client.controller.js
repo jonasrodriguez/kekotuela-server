@@ -93,7 +93,7 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Client with the specified clientId in the request
+// Delete a user with the specified clientId in the request
 exports.delete = (req, res) => {
     Client.findByIdAndRemove(req.params.clientId)
     .then(client => {

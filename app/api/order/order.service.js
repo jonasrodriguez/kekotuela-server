@@ -1,10 +1,10 @@
-const Note = require('./note.model');
+const Order = require('./order.model');
 const ObjectID = require('mongodb').ObjectID;
 
-function FillNoteData(data) {
-    return new Note({    
+function FillOrderData(data) {
+    return new Order({    
         redeableId: data.redeableId,
-        order: ObjectID(data.orderId),
+        note: ObjectID(data.orderId),
         materials: data.materials,
         photoBefore: data.photoBeforePath,
         photoAfter: data.photoAfterPath,
@@ -16,25 +16,25 @@ function FillNoteData(data) {
 
 exports.insert = (body) => {    
     try {                     
-        const note = new Note(body);
-        note.save();
+        const order = new Order(body);
+        order.save();
     } catch (error) {
-        throw Error('Error while inserting new Note');
+        throw Error('Error while inserting new Order');
     }
 }
 
 exports.get = async function (query) {
     try {
-        return await Note.find(query);
+        return await Order.find(query);
     } catch (e) {
-        throw Error('Error while getting Notes');
+        throw Error('Error while getting Orders');
     }
 }
 
 exports.findAll = async function () {
     try {
-        return await Note.find();
+        return await Order.find();
     } catch (e) {
-        throw Error('Error while getting Notes');
+        throw Error('Error while getting Orders');
     }
 }

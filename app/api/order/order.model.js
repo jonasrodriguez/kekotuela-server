@@ -5,13 +5,14 @@ const MaterialSchema = mongoose.Schema({
     name: String,
     reference: String,
     price: Number,
+    quantity: Number,
     comment: String
 });
 
-const NoteSchema = Schema({
+const OrderSchema = Schema({
     reference: String,
-    order: { type: Schema.Types.ObjectId, ref: 'Order' },
-    //materials: [MaterialSchema],
+    note: { type: Schema.Types.ObjectId, ref: 'Note' },
+    materials: [MaterialSchema],
     photoBefore: [String],
     photoAfter: [String],
     comments: String,
@@ -20,4 +21,4 @@ const NoteSchema = Schema({
     }, {timestamps: true}
 );
 
-module.exports = mongoose.model('Note', NoteSchema);
+module.exports = mongoose.model('Order', OrderSchema);

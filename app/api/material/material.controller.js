@@ -50,3 +50,57 @@ exports.getMaterials = (req, res) => {
         findClients(req, res);
     }    */
 };
+
+// Update a Material identified by the materialId in the request
+exports.update = (req, res) => {
+    // Validate Request
+    if(!req.body.content) {
+        return res.status(400).send({
+            message: "Material content can not be empty"
+        });
+    }
+
+    // Find client and update it with the request body
+    Material.findByIdAndUpdate(req.params.materialId, {
+        content: req.body.content
+    }, {new: true})
+    .then(material => {
+        if(!material) {
+            return res.status(404).send({
+                message: "Material not found with id " + req.params.materialId
+            });
+        }
+        res.send(material);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Material not found with id " + req.params.materialId
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating material with id " + req.params.materialId
+        });
+    });
+};
+
+// Delete a Material with the specified materialId in the request
+exports.delete = (req, res) => {
+    Material.findByIdAndRemove(req.params.materialId, { useFindAndModify: false })
+    .then(material => {
+        if(!material) {
+            return res.status(404).send({
+                message: "Material not found with id " + req.params.materialId
+            });
+        }
+        res.send({message: "Material deleted successfully!"});
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "Material not found with id " + req.params.materialId
+            });                
+        }
+        return res.status(500).send({
+            message: "Could not delete material with id " + req.params.materialId
+        });
+    });
+};
