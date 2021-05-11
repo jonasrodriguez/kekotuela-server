@@ -11,10 +11,10 @@ exports.login = async function (req, res) {
     } else {
       if (user) {
         const accessToken = jwt.sign(user.userName, jwtToken);
-        res.send(accessToken);
+        res.status(200).json({user: user.userName, token: accessToken});
       }
       else {
-        res.status(404).send("User name or password incorrect.");
+        res.status(401).send("Incorrect credentials.");
       }
     }
   });

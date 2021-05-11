@@ -6,7 +6,8 @@ const MaterialSchema = mongoose.Schema({
     reference: String,
     price: Number,
     quantity: Number,
-    comment: String
+    comment: String,
+    total: Number
 });
 
 const OrderSchema = Schema({
@@ -18,6 +19,7 @@ const OrderSchema = Schema({
     comments: String,
     signClient: String,
     signUser: String,
+    total: Number
     }, {timestamps: true}
 );
 
