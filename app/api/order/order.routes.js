@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const controller = require('./order.controller');
 const auth = require('../../middleware/auth/authenticateJWT');
+const validator = require('../../middleware/validators/order.validator');
 
 // Insert note
-router.post('/', auth.authenticateJWT, controller.insert);
+router.post('/', auth.authenticateJWT, validator.orderValidator, controller.insert);
 
 // Retrieve all notes
 router.get('/', auth.authenticateJWT, controller.findAll);
