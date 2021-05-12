@@ -61,7 +61,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.noteId;
   
-    User.findByIdAndRemove(id, { useFindAndModify: false })
+    Note.findByIdAndRemove(id, { useFindAndModify: false })
       .then(data => {
         if (!data) {
           res.status(404).send({
