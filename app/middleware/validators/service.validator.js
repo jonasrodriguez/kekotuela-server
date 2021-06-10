@@ -1,20 +1,16 @@
 const {check, validationResult} = require('express-validator');
 
-exports.noteValidator = [
-  check('description')
+exports.serviceValidator = [
+  check('name')
     .trim()
     .escape()
     .not()
     .isEmpty()
-    .withMessage('Note description cannot be empty!')
+    .withMessage('Service name can not be empty!')
     .bail(),
-  check('client.name')
-    .trim()
-    .escape()
-    .not()
-    .isEmpty()
-    .withMessage('Client name cannot be empty!')
-    .bail(),          
+  check('price',
+        'Price must be a number greater than 0')
+    .isFloat({min:0}), 
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())

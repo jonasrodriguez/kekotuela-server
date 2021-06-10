@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const ClientSchema = require('../client/client.model');
 
-const NoteSchema = Schema({   
+const NoteSchema = mongoose.Schema({   
     reference: String,     
-    client: { type: Schema.Types.ObjectId, ref: 'Client' },
+    client: ClientSchema.ClientSchema,
     priority: Boolean,
     description: String,    
     comments: String,
-    scheduledUser: { type: Schema.Types.ObjectId, ref: 'User' },
+    scheduledUser: String,
     scheduledDate: Date,
     }, {timestamps: true}
 );

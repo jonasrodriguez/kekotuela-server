@@ -1,17 +1,6 @@
-const Client = require('./client.model.js');
+const Client = require('./client.model.js').ClientModel;
 const Service = require('./client.service.js')
 
-// Create and Save a new Client
-exports.create = async (req, res) => {
-    try {
-        var client = await Service.create(req.body);
-        return res.status(200).json({ status: 200, data: client, message: "Client succesfully added" });
-    } catch (e) {
-        return res.status(400).json({ status: 400, message: e.message });
-    }
-};
-
-// Retrieve and return all Clients from the database.
 exports.getClients = (req, res) => {
     if(Object.keys(req.query).length === 0) {
         findAll(res);
@@ -36,7 +25,7 @@ const findClients = (req, res) => {
     Client.find({$or: [
             {'name': reg},
             {'surname': reg}]})
-            .then(clients => { res.send(clients); });
+        .then(clients => { res.send(clients); });
 };
 
 // Find a client with a clientId
@@ -60,57 +49,29 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a Client identified by the clientId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    if(!req.body.content) {
-        return res.status(400).send({
-            message: "Client content can not be empty"
-        });
+exports.create = async (req, res, next) => {
+    try {
+        var client = await Service.insert(req.body);
+        return res.status(200).json({ data: client, message: "Client succesfully added" });
+    } catch (e) {
+        next(e);
     }
-
-    // Find client and update it with the request body
-    Client.findByIdAndUpdate(req.params.clientId, {
-        title: req.body.title || "Untitled Client",
-        content: req.body.content
-    }, {new: true})
-    .then(client => {
-        if(!client) {
-            return res.status(404).send({
-                message: "Client not found with id " + req.params.clientId
-            });
-        }
-        res.send(client);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Client not found with id " + req.params.clientId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error updating client with id " + req.params.clientId
-        });
-    });
 };
 
-// Delete a user with the specified clientId in the request
-exports.delete = (req, res) => {
-    Client.findByIdAndRemove(req.params.clientId)
-    .then(client => {
-        if(!client) {
-            return res.status(404).send({
-                message: "Client not found with id " + req.params.clientId
-            });
-        }
-        res.send({message: "Client deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Client not found with id " + req.params.clientId
-            });                
-        }
-        return res.status(500).send({
-            message: "Could not delete client with id " + req.params.clientId
-        });
-    });
+exports.update = async function (req, res, next) {
+    try {
+        var client = await Service.update(req.params.clientId, req.body);
+        return res.status(200).json({ data: client, message: "Material updated succesfully"});
+    } catch (e) {
+        next(e);
+    }
+}; 
+
+exports.delete = async function (req, res, next) {
+    try {
+        await Service.delete(req.params.clientId);
+        return res.status(200).json({ message: "Client deleted successfully"});
+    } catch (e) {
+        next(e);
+    }
 };

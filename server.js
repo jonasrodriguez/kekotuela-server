@@ -36,6 +36,10 @@ app.use(cors());
 const routes = require('./app/routes');
 app.use('/api', routes);
 
+// Require error handling
+const errorhandler = require('./app/middleware/errorhandler');
+app.use(errorhandler);
+
 // listen for requests
 app.listen(process.env.PORT, () => {
     console.log("Server is listening on port " + process.env.PORT);

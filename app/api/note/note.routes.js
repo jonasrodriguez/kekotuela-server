@@ -7,7 +7,7 @@ const validator = require('../../middleware/validators/note.validator');
 router.get('/', auth.authenticateJWT, controller.findAll);
 
 // Create a new note
-router.post('/', auth.authenticateJWT, validator.noteValidator, controller.add);
+router.post('/', auth.authenticateJWT, validator.noteValidator, controller.insert);
 
 // Update a note with noteId
 router.put('/:noteId', auth.authenticateJWT, controller.update);

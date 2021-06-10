@@ -1,26 +1,48 @@
-const Client = require('./client.model.js');
+const Client = require('./client.model.js').ClientModel;
 
-exports.create = async function (body) {
-    if(!body.name) {
-        throw Error('Name cannot be empty');
+exports.insert = async function (body) {
+    const client = new Client(body);
+    const existingClient = await Client.findOne({$or:[{dni: client.dni},{phone: client.phone},{email: client.email}]});
+
+    if (existingClient) {
+        if (existingClient.dni === client.dni) {
+            throw ({ status: 400, code: 'ID_ALREADY_EXIST', message: 'New client id already exists.' });
+        } else if (existingClient.phone === client.phone) {
+            throw ({ status: 400, code: 'PHONE_ALREADY_EXIST', message: 'New client phone number already exists.' });
+        } else {
+            throw ({ status: 400, code: 'EMAIL_ALREADY_EXIST', message: 'New client email already exists.' });
+        }
+    } else {
+        return client.save();
     }
+}
 
-    const client = new Client({
-        name: body.name,
-        surname: body.surname,
-        second_surname: body.second_surname,
-        dni: body.dni,
-        phone: body.phone,
-        address: body.address,
-        cp: body.cp,
-        city: body.city,
-        email: body.email,
-        comment: body.comment
-    });
+exports.update = async function (id, body) {
+    const client = await Client.findById(id);
+    if (!client) {
+        throw ({ status: 404, code: 'CLIENT_NOT_FOUND', message: 'No client found with matching id.' });
+    } else {
+        client.set(body);
+        const existingClient = await Client.findOne({$or:[{dni: client.dni},{phone: client.phone},{email: client.email}]});
+        if (existingClient && existingClient._id.toString() !== id) {
+            if (existingClient.dni === client.dni) {
+                throw ({ status: 400, code: 'ID_ALREADY_EXIST', message: 'New client id already exists.' });
+            } else if (existingClient.phone === client.phone) {
+                throw ({ status: 400, code: 'PHONE_ALREADY_EXIST', message: 'New client phone number already exists.' });
+            } else {
+                throw ({ status: 400, code: 'EMAIL_ALREADY_EXIST', message: 'New client email already exists.' });
+            }
+        } else {            
+            return client.save();
+        }  
+    }    
+}
 
-    try {
-        client.save();
-    } catch (error) {
-        throw Error('Error while inserting new client');
+exports.delete = async function(id) {
+    const client = await Client.findById(id);
+    if (!client) {
+        throw ({ status: 404, code: 'CLIENT_NOT_FOUND', message: 'No client found with matching id.' });
+    } else {
+        client.remove();
     }
 }

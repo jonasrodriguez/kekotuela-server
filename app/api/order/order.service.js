@@ -30,27 +30,26 @@ function FillOrderData(data) {
 };
 
 exports.insert = async (body) => {    
-    try {          
-        body.reference = await CreateReferenceNum();
-        const order = FillOrderData(body);
-        order.save();
-    } catch (error) {
-        throw Error('Error while inserting new Order');
-    }
+    body.reference = await CreateReferenceNum();
+    const order = FillOrderData(body);
+    order.save();
 }
 
-exports.get = async function (query) {
-    try {
-        return await Order.find(query);
-    } catch (e) {
-        throw Error('Error while getting Orders');
-    }
+exports.update = async function (id, body) {
+    const order = await Order.findById(id);
+    if (!order) {
+        throw ({ status: 404, code: 'ORDER_NOT_FOUND', message: 'No order found with matching id.' });
+    } else {
+        order.set(body);
+        return order.save();
+    }    
 }
 
-exports.findAll = async function () {
-    try {
-        return await Order.find();
-    } catch (e) {
-        throw Error('Error while getting Orders');
+exports.delete = async function(id) {
+    const order = await Order.findById(id);
+    if (!order) {
+        throw ({ status: 404, code: 'ORDER_NOT_FOUND', message: 'No order found with matching ID.' });
+    } else {
+        order.remove();
     }
 }

@@ -15,5 +15,9 @@ const ClientSchema = mongoose.Schema({
     comment: String
     }, {timestamps: true}
 );
+const ClientModel = mongoose.model('Client', ClientSchema);
 
-module.exports = mongoose.model('Client', ClientSchema);
+module.exports = {
+    ClientSchema,
+    ClientModel,
+}

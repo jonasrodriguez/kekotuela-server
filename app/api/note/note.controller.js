@@ -1,11 +1,8 @@
 const Service = require('./note.service');
 const Note = require('./note.model');
 
-// Retrieve and return all Notes from the database.
 exports.findAll = (req, res) => {
-    Note.find()
-    .populate('client')
-    .populate('user', 'userName')
+    Note.find(req.body)
     .then(orders => {
         res.send(orders);
     }).catch(err => {
@@ -15,67 +12,29 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.add = async function (req, res) {
+exports.insert = async function (req, res, next) {
     try {
-        var user = Service.insert(req.body);
-        return res.status(200).json({ status: 200, data: user, message: "Note added succesfully"});
+        const note = await Service.insert(req.body);
+        return res.status(200).json({ data: note, message: "Note added succesfully"});
     } catch (e) {
-        return res.status(400).json({ status: 400, message: e.message });
+        next(e);
     }
 };
 
-exports.getNotes = async function (req, res) {
+exports.update = async function (req, res, next) {
     try {
-        var users = await Service.get({})
-        return res.status(200).json({ status: 200, data: users, message: "Notes succesfully Retrieved"});
+        const note = await Service.update(req.params.noteId, req.body);
+        return res.status(200).json({ data: note, message: "Note updated succesfully"});
     } catch (e) {
-        return res.status(400).json({ status: 400, message: e.message });
+        next(e);
     }
-}
+}; 
 
-exports.update = (req, res) => {
-    if (!req.body) {
-        return res.status(400).send({
-            message: "User data to update can not be empty!"
-        });
+exports.delete = async function (req, res, next) {
+    try {
+        await Service.delete(req.params.noteId);
+        return res.status(200).json({ message: "Note deleted succesfully" });
+    } catch (e) {
+        next(e);
     }
-
-    const id = req.params.noteId;
-
-    Note.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-        .then(data => {
-        if (!data) {
-            res.status(404).send({
-            message: `Cannot update Note with id=${id}. Maybe Note was not found!`
-            });
-        } else res.send({ message: "Note was updated successfully." });
-        })
-        .catch(err => {
-        res.status(500).send({
-            message: "Error updating Note with id=" + id
-        });
-    });
-};
-
-  
-exports.delete = (req, res) => {
-    const id = req.params.noteId;
-  
-    Note.findByIdAndRemove(id, { useFindAndModify: false })
-      .then(data => {
-        if (!data) {
-          res.status(404).send({
-            message: `Cannot delete Note with id=${id}. Maybe Note was not found!`
-          });
-        } else {
-          res.send({
-            message: "Note was deleted successfully!"
-          });
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Could not delete Note with id=" + id
-        });
-    });
 };

@@ -10,7 +10,7 @@ router.post('/', auth.authenticateJWT, validator.materialValidator, controller.a
 router.get('/', auth.authenticateJWT, controller.findAll);
 
 // Update a Material with materialId
-router.put('/:materialId', auth.authenticateJWT, controller.update);
+router.put('/:materialId', auth.authenticateJWT, validator.materialValidator, controller.update);
 
 // Delete a Material with materialId
 router.delete('/:materialId', auth.authenticateJWT, controller.delete);
