@@ -7,7 +7,8 @@ const UserSchema = mongoose.Schema({
     phone: String,
     email: String,
     password: String,
-    permissionLevel: Number
+    permissionLevel: Number,
+    costHour: Number
     }, {timestamps: true}
 );
 

@@ -1,25 +1,33 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ClientSchema = require('../client/client.model');
+
+const NoteSchema = mongoose.Schema({    
+    reference: String,
+    description: String,
+}, { _id : false });
 
 const MaterialSchema = mongoose.Schema({    
     name: String,
     reference: String,
     price: Number,
     quantity: Number,
-    comment: String,
+    hours: Number,
     total: Number
-});
+}, { _id : false });
 
 const OrderSchema = Schema({
     reference: String,
-    note: { type: Schema.Types.ObjectId, ref: 'Note' },
+    note: NoteSchema,
+    client: ClientSchema.ClientSchema,
     materials: [MaterialSchema],
+    services: [MaterialSchema],
+    laborers: [MaterialSchema],
     photoBefore: [String],
     photoAfter: [String],
     comments: String,
     signClient: String,
-    signUser: String,
-    total: Number
+    signUser: String
     }, {timestamps: true}
 );
 

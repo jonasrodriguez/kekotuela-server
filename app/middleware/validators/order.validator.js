@@ -1,7 +1,7 @@
 const {check, validationResult} = require('express-validator');
 
 exports.orderValidator = [
-  check('noteId')
+  check('note.reference')
     .trim()
     .escape()
     .not()

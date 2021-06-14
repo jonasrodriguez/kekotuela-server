@@ -1,5 +1,4 @@
 const Order = require('./order.model');
-const ObjectID = require('mongodb').ObjectID;
 
 const CreateReferenceNum = async () => {
     const today = new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 0, 0, 0);
@@ -15,23 +14,9 @@ const CreateReferenceNum = async () => {
     return "P_" + today.getFullYear() + ("0" + (today.getMonth() + 1)).slice(-2) + ("0" + today.getDate()).slice(-2) + "_" + refCount;
 }
 
-function FillOrderData(data) {
-    return new Order({    
-        reference: data.reference,
-        note: ObjectID(data.noteId),
-        materials: data.materials,
-        photoBefore: data.photoBeforePath,
-        photoAfter: data.photoAfterPath,
-        comments: data.comments,
-        signClient: data.signClientPath,
-        signUser: data.signUserPath,
-        total: data.total
-    });
-};
-
 exports.insert = async (body) => {    
     body.reference = await CreateReferenceNum();
-    const order = FillOrderData(body);
+    const order = new Order(body);
     order.save();
 }
 

@@ -3,13 +3,6 @@ const Order = require('./order.model');
 
 exports.findAll = (req, res) => {
     Order.find(req.body)
-    .populate({ 
-        path: 'note',
-        populate: {
-          path: 'client',
-          model: 'Client'
-        } 
-     })
     .then(orders => {
         res.send(orders);
     }).catch(err => {
